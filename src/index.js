@@ -9,11 +9,14 @@ const query = document.querySelector('.header_form-input');
 const button = document.querySelector('.header_form-submit');
 const lightbox = new SimpleLightbox('.gallery a');
 
+
+
 button.addEventListener('click', (event) => {
     event.preventDefault();
     imageGet(query.value,page)
         .then(({ data }) => {
             document.querySelector('.gallery').innerHTML = '';
+            page = 1;
             if (data.totalHits == 0) {return Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.') }
             return Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`),
             buildGallery(data.hits),
@@ -24,6 +27,7 @@ button.addEventListener('click', (event) => {
 
 query.addEventListener('click', (e) => { return query.value = '' })
 
+
 window.addEventListener('scroll',()=>{
     console.log(window.scrollY) //scrolled from top
     console.log(window.innerHeight) //visible part of screen
@@ -31,12 +35,11 @@ window.addEventListener('scroll',()=>{
     document.documentElement.scrollHeight){
         page++,
         imageGet(query.value,page)
-        .then(({ data }) => {
+            .then(({ data }) => {
             return buildGallery(data.hits),
             lightbox.refresh();
         })
-            .catch(() => {return page=1,
-                Notiflix.Notify.failure(`We're sorry, but you've reached the end of search results.`)
+            .catch(() => {Notiflix.Notify.failure(`We're sorry, but you've reached the end of search results.`)
             })
     }
 })

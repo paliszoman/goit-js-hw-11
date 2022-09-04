@@ -1,1 +1,2 @@
-import './css/styles.css';
+import './sass/index.scss';
+console.log('aus')
